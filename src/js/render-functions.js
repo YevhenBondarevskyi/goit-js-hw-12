@@ -1,54 +1,56 @@
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const galleryList = document.querySelector(".gallery");
-const loader = document.querySelector(".loader");
-const loadBtn = document.querySelector(".load-btn");
-const lightbox = new SimpleLightbox(".gallery a", {
-    captionDelay: 250,
-    captionPosition: "bottom",
-    captionsData: "alt"
-})
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
 
 export function createGallery(images) {
-    const markUp = images.map(item => `
-        <li class="gallery-item">
-        <a class="gallery-link" href="${item.largeImageURL}">
-        <img
-        class="gallery-img"
-        src="${item.webformatURL}"
-        alt="${item.tags}"
-        width="360" />
-        </a>
-        <div class="descr">
-       <p class="descr-label">Likes <span class="descr-span">${item.likes}</span></p>
-       <p class="descr-label">Views <span class="descr-span">${item.views}</span></p>
-       <p class="descr-label">Comments <span class="descr-span">${item.comments}</span></p>
-       <p class="descr-label">Downloads <span class="descr-span">${item.downloads}</span></p>
-       </div>
-        </li>
-        `).join("");
-    
-        galleryList.insertAdjacentHTML("beforeend", markUp);
-        lightbox.refresh();
-};
+  const container = document.querySelector('.gallery');
+  const markup = images
+    .map(
+      ({
+        webformatURL,
+        largeImageURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) => `
+    <li class="gallery__item">
+      <a class="gallery__link" href="${largeImageURL}">
+        <img class="gallery__image" src="${webformatURL}" alt="${tags}" loading="lazy"/>
+        <div class="gallery__info">
+        <p class="gallery__text"><b>Likes</b><span>${likes}</span></p>
+        <p class="gallery__text"><b>Views</b><span>${views}</span></p>
+        <p class="gallery__text"><b>Comments</b><span>${comments}</span></p>
+        <p class="gallery__text"><b>Downloads</b><span>${downloads}</span></p>
+        </div>
+      </a>
+    </li>`
+    )
+    .join('');
+  container.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
+}
 
 export function clearGallery() {
-    galleryList.innerHTML = "";
+  document.querySelector('.gallery').innerHTML = '';
 }
 
 export function showLoader() {
-    loader.style.display = 'block';
+  document.querySelector('.loader-container').classList.remove('hidden');
 }
-
 export function hideLoader() {
-    loader.style.display = 'none';
+  document.querySelector('.loader-container').classList.add('hidden');
 }
 
-export function showLoadMoreButton(){
-    loadBtn.style.display = "block";
+export function showLoadMoreButton() {
+  document.querySelector('.load-more').classList.remove('is-hidden');
 }
-
 export function hideLoadMoreButton() {
-    loadBtn.style.display = 'none';
+  document.querySelector('.load-more').classList.add('is-hidden');
 }
